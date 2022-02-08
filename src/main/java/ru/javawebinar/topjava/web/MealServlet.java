@@ -22,6 +22,7 @@ public class MealServlet extends HttpServlet {
 
         List<MealTo> mealsToList = MealsUtil.timelessMapper(MealsUtil.meals, 2000);
         request.setAttribute("mealsToList", mealsToList);
+
         request.getRequestDispatcher("/meals.jsp").forward(request, response);
     }
 
