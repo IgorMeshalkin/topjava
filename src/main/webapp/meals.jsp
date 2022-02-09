@@ -26,7 +26,7 @@
 <h3><a href="index.html">Home</a></h3>
 <hr>
 <h2>Meals</h2>
-<a href="index.html">Add Meal</a>
+<a href="meals?action=add">Add Meal</a>
 <br>
 <br>
 <table>
@@ -37,31 +37,32 @@
         <th></th>
         <th></th>
     </tr>
-    <c:forEach items="${mealsToList}" var="user">
-        <c:if test="${user.isExcess() == false}">
+    <c:forEach items="${mealsToList}" var="meal">
+        <c:if test="${meal.isExcess() == false}">
             <tr>
                 <td><font
-                        color="#008000">${user.getLocalDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}</font>
+                        color="#008000">${meal.getLocalDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}</font>
                 </td>
-                <td><font color="#008000">${user.getDescription()}</font></td>
-                <td><font color="#008000">${user.getCalories()}</font></td>
-                <td><a href="index.html">Update</a></td>
-                <td><a href="index.html">Delete</a></td>
+                <td><font color="#008000">${meal.getDescription()}</font></td>
+                <td><font color="#008000">${meal.getCalories()}</font></td>
+                <td><a href="meals?action=update&mealId=${meal.getId()}">Update</a></td>
+                <td><a href="meals?action=delete&mealId=${meal.getId()}">Delete</a></td>
             </tr>
         </c:if>
-        <c:if test="${user.isExcess()}">
+        <c:if test="${meal.isExcess()}">
             <tr>
                 <td><font
-                        color="#FF0000">${user.getLocalDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}</font>
+                        color="#FF0000">${meal.getLocalDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}</font>
                 </td>
-                <td><font color="#FF0000">${user.getDescription()}</font></td>
-                <td><font color="#FF0000">${user.getCalories()}</font></td>
-                <td><a href="index.html">Update</a></td>
-                <td><a href="index.html">Delete</a></td>
+                <td><font color="#FF0000">${meal.getDescription()}</font></td>
+                <td><font color="#FF0000">${meal.getCalories()}</font></td>
+                <td><a href="meals?action=update&mealId=${meal.getId()}">Update</a></td>
+                <td><a href="meals?action=delete&mealId=${meal.getId()}">Delete</a></td>
             </tr>
         </c:if>
 
     </c:forEach>
 </table>
+<form method="post" action="/delete"></form>
 </body>
 </html>
