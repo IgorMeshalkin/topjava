@@ -1,11 +1,16 @@
 package ru.javawebinar.topjava.dao;
 
 import java.util.List;
-import java.util.Objects;
 
-public interface Dao {
+public interface Dao<T> {
 
-    public List<Objects> getAll();
+    public List<T> getAll();
+
+    public T getById (Integer id);
+
+    public void add (T t);
+
+    public void update (T t);
 
     public void delete(Integer id);
 }

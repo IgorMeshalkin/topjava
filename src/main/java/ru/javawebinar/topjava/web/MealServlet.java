@@ -1,8 +1,10 @@
 package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
+import ru.javawebinar.topjava.dao.Dao;
 import ru.javawebinar.topjava.dao.MealDao;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -19,8 +22,9 @@ public class MealServlet extends HttpServlet {
     private static final String ALL_MEALS = "meals.jsp";
     private static final String UPDATE = "update.jsp";
     private static final String CREATE = "create.jsp";
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
-    private static final MealDao dao = new MealDao();
+    private static final Dao<Meal> dao = new MealDao();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -34,7 +38,8 @@ public class MealServlet extends HttpServlet {
                 int id = Integer.parseInt(request.getParameter("mealId"));
                 dao.delete(id);
                 forward = ALL_MEALS;
-                request.setAttribute("mealsToList", dao.getAll());
+                request.setAttribute("formatter", FORMATTER);
+                request.setAttribute("mealsToList", MealsUtil.timelessMapper(dao.getAll()));
             }
             if (action.equalsIgnoreCase("update")) {
                 int id = Integer.parseInt(request.getParameter("mealId"));
@@ -47,7 +52,8 @@ public class MealServlet extends HttpServlet {
             }
         } else {
             forward = ALL_MEALS;
-            request.setAttribute("mealsToList", dao.getAll());
+            request.setAttribute("formatter", FORMATTER);
+            request.setAttribute("mealsToList", MealsUtil.timelessMapper(dao.getAll()));
         }
 
         request.getRequestDispatcher(forward).forward(request, response);
@@ -101,7 +107,8 @@ public class MealServlet extends HttpServlet {
             dao.update(meal);
         }
 
-        request.setAttribute("mealsToList", dao.getAll());
+        request.setAttribute("formatter", FORMATTER);
+        request.setAttribute("mealsToList", MealsUtil.timelessMapper(dao.getAll()));
         request.getRequestDispatcher("meals.jsp").forward(request, response);
     }
 }
