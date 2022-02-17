@@ -8,7 +8,6 @@ import java.time.LocalTime;
 
 @Component
 public class Meal extends AbstractBaseEntity{
-    private Integer id;
 
     private Integer userId;
 

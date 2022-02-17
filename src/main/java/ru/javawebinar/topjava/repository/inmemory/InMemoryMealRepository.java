@@ -62,22 +62,9 @@ public class InMemoryMealRepository implements MealRepository {
     }
 
     public List<Meal> getByDateFilter(Integer userId, LocalDate startDate, LocalDate endDate) {
-        if (startDate == null && endDate == null) {
-            return getAll(userId);
-        }
-        if (startDate == null) {
-            return getAll(userId).stream()
-                    .filter(meal -> meal.getDateTime().toLocalDate().compareTo(endDate) <= 0)
-                    .collect(Collectors.toList());
-        }
-        if (endDate == null) {
-            return getAll(userId).stream()
-                    .filter(meal -> meal.getDateTime().toLocalDate().compareTo(startDate) >= 0)
-                    .collect(Collectors.toList());
-        }
-        else return getAll(userId).stream()
-                .filter(meal -> meal.getDateTime().toLocalDate().compareTo(startDate) >= 0)
-                .filter(meal -> meal.getDateTime().toLocalDate().compareTo(endDate) <= 0)
+        return getAll(userId).stream()
+                .filter(meal -> meal.getDateTime().toLocalDate().compareTo(startDate) <= 0)
+                .filter(meal -> meal.getDateTime().toLocalDate().compareTo(endDate) >= 0)
                 .collect(Collectors.toList());
     }
 
