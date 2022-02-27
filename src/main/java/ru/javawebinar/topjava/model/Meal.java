@@ -8,7 +8,7 @@ import java.time.LocalTime;
 
 @NamedQueries({
         @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal u WHERE u.id=:id AND u.user.id=:user_id"),
-        @NamedQuery(name = Meal.GET, query = "SELECT u FROM Meal u LEFT JOIN FETCH u.dateTime WHERE u.user.id=:userId"),
+        @NamedQuery(name = Meal.GET_ALL, query = "SELECT u FROM Meal u WHERE u.user.id=:userId"),
 //        @NamedQuery(name = User.ALL_SORTED, query = "SELECT u FROM User u LEFT JOIN FETCH u.roles ORDER BY u.name, u.email"),
 })
 
@@ -16,7 +16,7 @@ import java.time.LocalTime;
 @Table(name = "meals")
 public class Meal extends AbstractBaseEntity {
     public static final String DELETE = "Meal.delete";
-    public static final String GET = "Meal.get";
+    public static final String GET_ALL = "Meal.get";
 
     @Column(name = "date_time", nullable = false, unique = true)
     @NotBlank
