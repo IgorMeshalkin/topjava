@@ -9,9 +9,7 @@ import ru.javawebinar.topjava.repository.MealRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 @Transactional(readOnly = true)
@@ -23,16 +21,16 @@ public class JpaMealRepository implements MealRepository {
     @Override
     @Transactional
     public Meal save(Meal meal, int userId) {
-        if (meal.isNew()) {
-            User ref = em.getReference(User.class, userId);
-            meal.setUser(ref);
+        User ref = em.getReference(User.class, userId);
+        meal.setUser(ref);
+        if(meal.isNew()) {
             em.persist(meal);
             return meal;
-//        } else if (!meal.getUser().getId().equals(userId)) {
-//            return null;
-        } else {
-            return em.merge(meal);
         }
+        if(get(meal.id(), userId) == null) {
+            return null;
+        }
+        return em.merge(meal);
     }
 
     @Override
@@ -46,21 +44,30 @@ public class JpaMealRepository implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        return em.find(Meal.class, id);
+//        return em.createNamedQuery(Meal.GET, Meal.class)
+//                .setParameter("id", id)
+//                .setParameter("user_id", userId)
+//                .getSingleResult();
+        Meal meal = em.find(Meal.class, id);
+        if (meal == null || meal.getUser().getId() != userId) {
+            return null;
+        }
+        return meal;
     }
 
     @Override
     public List<Meal> getAll(int userId) {
         return em.createNamedQuery(Meal.GET_ALL, Meal.class)
                 .setParameter("userId", userId)
-                .getResultList()
-                .stream()
-                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
-                .collect(Collectors.toList());
+                .getResultList();
     }
 
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
-        return null;
+        return em.createNamedQuery(Meal.BETWEEN_INCLUSIVE, Meal.class)
+                .setParameter("user_id", userId)
+                .setParameter("start", startDateTime)
+                .setParameter("end", endDateTime)
+                .getResultList();
     }
 }
