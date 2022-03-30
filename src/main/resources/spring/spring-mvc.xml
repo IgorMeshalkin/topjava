@@ -23,6 +23,9 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
+    <bean name="dateFormatter" class="ru.javawebinar.topjava.util.formatters.DateFormatter"/>
+    <bean name="timeFormatter" class="ru.javawebinar.topjava.util.formatters.TimeFormatter"/>
+
     <context:component-scan base-package="ru.javawebinar.**.web"/>
 
     <!--  all resources inside folder src/main/webapp/resources are mapped so they can be referred to inside JSP files -->
