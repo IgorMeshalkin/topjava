@@ -24,11 +24,12 @@ import java.util.Locale;
 @RestController
 @RequestMapping(value = "/rest/meals", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MealRestController extends AbstractMealController {
-
     @Autowired
     UserService userService;
+
     @Autowired
     DateFormatter dateFormatter;
+
     @Autowired
     TimeFormatter timeFormatter;
 
